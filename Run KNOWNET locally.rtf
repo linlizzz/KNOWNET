@@ -1,0 +1,85 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2820
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue-Bold;\f1\fnil\fcharset0 HelveticaNeue;\f2\fnil\fcharset0 HelveticaNeue-Italic;
+}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat2\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid101\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat3\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid201\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid3}
+{\list\listtemplateid4\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat4\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid301\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid4}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}{\listoverride\listid4\listoverridecount0\ls4}}
+\paperw11900\paperh16840\margl1440\margr1440\vieww30040\viewh17760\viewkind0
+\deftab560
+\pard\pardeftab560\partightenfactor0
+
+\f0\b\fs40 \cf0 Run KNOWNET locally\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b0\fs26 \cf0 \
+\pard\pardeftab560\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	0.	}Run Dynamodb locally\
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf0 docker run -d -p 8000:8000 amazon/dynamodb-local\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab560\pardirnatural\partightenfactor0
+\ls2\ilvl0\cf0 {\listtext	0.	}Create Chats table in the local Dynamodb\
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf0 brew install awscli\uc0\u8232 \
+export AWS_REGION=us-east-1\uc0\u8232 export AWS_ACCESS_KEY_ID=local\u8232 export AWS_SECRET_ACCESS_KEY=local\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf0 aws dynamodb create-table \\\
+  --table-name Chats \\\
+  --attribute-definitions AttributeName=id,AttributeType=S \\\
+  --key-schema AttributeName=id,KeyType=HASH \\\
+  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \\\
+  --endpoint-url http://localhost:8000\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\pardeftab560\pardirnatural\partightenfactor0
+\ls3\ilvl0\cf0 {\listtext	0.	}Update dynamodb client in the route.ts\uc0\u8232 const dynamoDBClient = new DynamoDBClient(\{\
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf0   region: 'us-east-1',\
+ endpoint: 'http://localhost:8000', 
+\f2\i // Point to the local DynamoDB instance
+\f1\i0 \
+  credentials: \{\
+    accessKeyId: 'local',\
+    secretAccessKey: 'local'\
+  \}\
+\})\
+\
+\
+\pard\pardeftab560\pardirnatural\partightenfactor0
+\ls4\ilvl0\cf0 {\listtext	0.	}Install neo4j locally\uc0\u8232 \u8232 // docker pull neo4j\
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf0 \
+docker run --name neo4j \\\
+  -p 7474:7474 -p 7687:7687 \\\
+  -v /Users/zhangl9/Downloads/Neo4j_data:/import \\\
+  -e NEO4J_AUTH=neo4j/strongpass \\\
+  -e NEO4J_server_memory_heap_initial__size=2G \\\
+  -e NEO4J_server_memory_heap_max__size=4G \\\
+  -e NEO4J_server_memory_pagecache_size=2G \\\
+  -d neo4j\
+\
+\
+\
+Go to Neo4j admin web ui: localhost:7474 \uc0\u8232 Login with user name and password: neo4j/strongpass\
+\
+Execute these commands to import csv files into nodes and relations:\uc0\u8232 \u8232 CREATE INDEX FOR (n:Node) ON (n.CUI);\u8232 \u8232 LOAD CSV WITH HEADERS FROM 'file:///neo4j_node_updated.csv' AS row\
+CREATE (:Node \{CUI: row.CUI, Name: row.Name, Semantic_Type: row.Semantic_Type, Category: row.Category, Label: row.Label\});\uc0\u8232 \u8232 Split relationship files into 2 because there were some memory issues while processing a single file.\u8232 \
+LOAD CSV WITH HEADERS FROM 'file:///rel_1.csv' AS row\
+MATCH (a:Node \{CUI: row.START_ID\})\
+MATCH (b:Node \{CUI: row.END_ID\})\
+CREATE (a)-[:Relation \{type: row.PREDICATE, PubMed_ID: row.PubMed_ID, Sentence: row.SENTENCE, Start_Label: row.START_LABEL, End_Label: row.END_LABEL\}]->(b);\
+\
+LOAD CSV WITH HEADERS FROM 'file:///rel_2.csv' AS row\
+MATCH (a:Node \{CUI: row.START_ID\})\
+MATCH (b:Node \{CUI: row.END_ID\})\
+CREATE (a)-[:Relation \{type: row.PREDICATE, PubMed_ID: row.PubMed_ID, Sentence: row.SENTENCE, Start_Label: row.START_LABEL, End_Label: row.END_LABEL\}]->(b);\
+\uc0\u8232 \
+}

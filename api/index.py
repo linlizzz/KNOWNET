@@ -48,6 +48,7 @@ def hello_world():
 
 @app.route("/api/chat", methods=["POST"])
 def post_chat_message():
+    print("chat message received")
     data = request.json
     input_type = data.get("input_type")
     user_id = data.get("userId")
@@ -234,7 +235,7 @@ def match_KG_nodes(entity_list, similarity_list):
 
 def select_subgraph(cypher_statement, node_id_map, rel_id_map):
     uri = neo4j_url
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "yuhou"))
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "strongpass"))
     session = driver.session()
     neo4j_res = session.run(cypher_statement)
 
@@ -275,7 +276,7 @@ def select_subgraph(cypher_statement, node_id_map, rel_id_map):
 
 def select_subgraph_1Hop(cypher_statement, node_id_map, rel_id_map):
     uri = neo4j_url
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "yuhou"))
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "strongpass"))
     session = driver.session()
     neo4j_res = session.run(cypher_statement)
 
@@ -328,7 +329,7 @@ def select_subgraph_1Hop(cypher_statement, node_id_map, rel_id_map):
 
 def summarize_neighbor_type(cypher_statement):
     uri = neo4j_url
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "yuhou"))
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "strongpass"))
     session = driver.session()
     neo4j_res = session.run(cypher_statement)
     res = []
@@ -390,7 +391,7 @@ def visualization_partial_match(matched_entity, unmatched_entity, relation, is_h
     # using CUI to find the category of the matched entity
     cypher_statement = "MATCH (n:Node{CUI:\"" + matched_cui + "\"}) RETURN n.Label"
     uri = neo4j_url
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "yuhou"))
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "strongpass"))
     session = driver.session()
     neo4j_res = session.run(cypher_statement)
     for record in neo4j_res:

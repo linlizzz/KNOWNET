@@ -101,7 +101,7 @@ const CustomEdge: FC<EdgeProps> = ({
               }}
               className="nodrag nopan"
             >
-              {label!.toString().toLowerCase()}
+              {label?.toString().toLowerCase()}
               {` `}
               <span className="border-l border-gray-400 px-[2px] text-gray-600 text-sm">
                 <i className={`fas fa-regular ${iconClass} px-1`} />

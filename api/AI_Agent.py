@@ -11,13 +11,14 @@ import pandas as pd
 from embeddings_utils import get_embedding, cosine_similarity
 import numpy as np
 import re
+import os
 from sklearn.preprocessing import normalize
 from sklearn.metrics.pairwise import cosine_similarity as cosine_similarity_sklearn
 
 kg_nodes_embedding = pd.read_parquet("/api/ADInt_CUI_embeddings.parquet")
 print("KG nodes embedding load complete...")
 openai.api_key = ""
-neo4j_url = "neo4j://3.82.211.172:7687"
+neo4j_url = os.getenv("NEO4J_URL")
 
 
 def AI_respnse(message):
@@ -82,7 +83,7 @@ def match_KG_nodes(entity_list, kg_nodes_embedding):
 
 def select_subgraph(cypher_statement):
     uri = neo4j_url
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "yuhou"))
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "strongpass"))
     session = driver.session()
     neo4j_res = session.run(cypher_statement)
 
@@ -134,7 +135,7 @@ def select_subgraph(cypher_statement):
 
 def summarize_neighbor_type(cypher_statement):
     uri = neo4j_url
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "yuhou"))
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "strongpass"))
     session = driver.session()
     neo4j_res = session.run(cypher_statement)
     res = []

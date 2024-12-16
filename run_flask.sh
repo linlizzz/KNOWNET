@@ -1,6 +1,7 @@
 #!/bin/bash
-source venv/bin/activate
-pip install -r requirements.txt
+# source venv/bin/activate 
+# pip install -r requirements.txt
+source activate knownet
 flask --app api/index --debug run -p 5328 
 
 # # Windows users:

@@ -18,9 +18,10 @@ const openai = new OpenAI({
 
 const dynamoDBClient = new DynamoDBClient({
   region: 'us-east-1',
+  endpoint: 'http://localhost:8000', // Point to the local DynamoDB instance
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string
+    accessKeyId: 'local',
+    secretAccessKey: 'local'
   }
 })
 
