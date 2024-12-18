@@ -51,4 +51,9 @@ LOAD CSV WITH HEADERS FROM 'file:///rel_2.csv' AS row
 MATCH (a:Node {CUI: row.START_ID})
 MATCH (b:Node {CUI: row.END_ID})
 CREATE (a)-[:Relation {type: row.PREDICATE, PubMed_ID: row.PubMed_ID, Sentence: row.SENTENCE, Start_Label: row.START_LABEL, End_Label: row.END_LABEL}]->(b);
- 
+
+
+>docker ps -a
+>docker start/stop [name]
+
+>pnpm dev 
