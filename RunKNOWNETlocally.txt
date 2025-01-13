@@ -41,7 +41,7 @@ docker run --name neo4j \
 Go to Neo4j admin web ui: localhost:7474  Login with user name and password: neo4j/strongpass
 
 Execute these commands to import csv files into nodes and relations:  CREATE INDEX FOR (n:Node) ON (n.CUI);  LOAD CSV WITH HEADERS FROM 'file:///neo4j_node_updated.csv' AS row
-CREATE (:Node {CUI: row.CUI, Name: row.Name, Semantic_Type: row.Semantic_Type, Category: row.Category, Label: row.Label});  Split relationship files into 2 because there were some memory issues while processing a single file. 
+CREATE (:Node {CUI: row.CUI, Name: row.Name, Semantic_Type: row.Semantic_Type, Category: row.Category, Label: row.Label});  Split relationship files into 2 because there were some memory issues while processing a single file. (KG data could be downloaded at https://github.com/zhang-informatics/ADInt ) (Separate files could be downloaded at https://drive.google.com/drive/folders/1iB6k3UQB9t0L5IuFK_GXteQbEa5wag9J?usp=drive_link) 
 LOAD CSV WITH HEADERS FROM 'file:///rel_1.csv' AS row
 MATCH (a:Node {CUI: row.START_ID})
 MATCH (b:Node {CUI: row.END_ID})
