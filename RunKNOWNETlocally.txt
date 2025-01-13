@@ -15,7 +15,8 @@ aws dynamodb create-table \
   --endpoint-url http://localhost:8000
 
 
-	3.	Update dynamodb client in the route.ts  // /app/api/chat const dynamoDBClient = new DynamoDBClient({
+	3.	Update dynamodb client in the route.ts  // (/app/api/chat/route.ts) 
+const dynamoDBClient = new DynamoDBClient({
   region: 'us-east-1',
  endpoint: 'http://localhost:8000', // Point to the local DynamoDB instance
   credentials: {
@@ -54,6 +55,6 @@ CREATE (a)-[:Relation {type: row.PREDICATE, PubMed_ID: row.PubMed_ID, Sentence: 
 
 
 >docker ps -a
->docker start/stop [name]
+>docker start/stop [name]  //  [neo4j], [reverent_jang]
 
 >pnpm dev 
