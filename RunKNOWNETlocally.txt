@@ -15,7 +15,7 @@ aws dynamodb create-table \
   --endpoint-url http://localhost:8000
 
 
-	3.	Update dynamodb client in the route.ts const dynamoDBClient = new DynamoDBClient({
+	3.	Update dynamodb client in the route.ts  // /app/api/chat const dynamoDBClient = new DynamoDBClient({
   region: 'us-east-1',
  endpoint: 'http://localhost:8000', // Point to the local DynamoDB instance
   credentials: {
