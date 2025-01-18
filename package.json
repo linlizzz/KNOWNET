@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "flask-dev": "./run_flask.sh",
-    "next-dev": "next dev --turbo",
+    "next-dev": "next dev --turbo -H 0.0.0.0",
     "dev": "concurrently \"pnpm run next-dev\" \"pnpm run flask-dev\"",
     "build": "next build",
     "start": "next start",
