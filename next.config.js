@@ -24,7 +24,7 @@ const nextConfig = {
         destination:
           process.env.NODE_ENV === 'development'
             ? 'http://127.0.0.1:5328/api/chat/:path*'
-            : 'http://your_production_flask_server/api/chat/:path*'
+            : 'http://medicine-llm.cs.aalto.fi/api/chat/:path*'
       },
       // Rewrite for nodes API
       {
@@ -32,7 +32,7 @@ const nextConfig = {
         destination:
           process.env.NODE_ENV === 'development'
             ? 'http://127.0.0.1:5328/api/nodes/:path*'
-            : 'http://your_production_flask_server/api/nodes/:path*'
+            : 'http://medicine-llm.cs.aalto.fi/api/nodes/:path*'
       },
       // Rewrite for python API
       {
@@ -40,7 +40,7 @@ const nextConfig = {
         destination:
           process.env.NODE_ENV === 'development'
             ? 'http://127.0.0.1:5328/api/python/:path*'
-            : 'http://your_production_flask_server/api/python/:path*'
+            : 'http://medicine-llm.cs.aalto.fi/api/python/:path*'
       }
     ]
   }
