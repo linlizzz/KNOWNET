@@ -25,11 +25,17 @@ aws dynamodb create-table \
 })
 
 
+# List all tables to verify Chats exists
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+
+
+
+
 	4.	Install neo4j locally  // docker pull neo4j
 
 docker run --name neo4j \
   -p 7474:7474 -p 7687:7687 \
-  -v /Users/zhangl9/Downloads/Neo4j_data:/import \
+  -v /Users/zhangl9/Documents/hci_llms_kgs/Neo4j_originalData:/import \
   -e NEO4J_AUTH=neo4j/strongpass \
   -e NEO4J_server_memory_heap_initial__size=2G \
   -e NEO4J_server_memory_heap_max__size=4G \
@@ -51,6 +57,23 @@ LOAD CSV WITH HEADERS FROM 'file:///rel_2.csv' AS row
 MATCH (a:Node {CUI: row.START_ID})
 MATCH (b:Node {CUI: row.END_ID})
 CREATE (a)-[:Relation {type: row.PREDICATE, PubMed_ID: row.PubMed_ID, Sentence: row.SENTENCE, Start_Label: row.START_LABEL, End_Label: row.END_LABEL}]->(b);
+
+
+
+If load together:
+
+LOAD CSV WITH HEADERS FROM 'file:///neo4j_rel.csv' AS row
+WITH row SKIP 0 LIMIT 600000
+MATCH (a:Node {CUI: row.START_ID})
+MATCH (b:Node {CUI: row.END_ID})
+CREATE (a)-[:Relation {
+  type: row.PREDICATE,
+  PubMed_ID: row.PubMed_ID,
+  Sentence: row.SENTENCE,
+  Start_Label: row.START_LABEL,
+  End_Label: row.END_LABEL
+}]->(b);
+
 
 
 >docker ps -a
