@@ -27,7 +27,7 @@ def AI_respnse(message):
     Also, please summary the specific entity/terms in your response (the keywords).
     In addition, please identify the specific entity/terms from the question.
     The entities/terms (keywords) can only be the following types: Dietary Supplement, Drugs, Disease, Symptom and Gene.
-    Please return your response in three parts: the first part is the answer of the question; the part part is the summarized entities/terms (keywords); the third part is the identified entities/terms from the question.
+    Please return your response in three parts: the first part is the answer of the question; the second part is the summarized entities/terms (keywords); the third part is the identified entities/terms from the question.
     Please use " || " to split the three parts.
     Please split the entities/terms (keywords) by " | " if there are more than one, and put them in "[]".
     For example, if the question is "Can Ginkgo biloba prevent Alzheimer's Disease?"
